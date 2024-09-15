@@ -16,6 +16,7 @@ import com.wynntils.core.text.PartStyle;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.handlers.chat.event.ChatMessageReceivedEvent;
 import com.wynntils.handlers.chat.type.RecipientType;
+import com.wynntils.models.activities.event.ActivityTrackerUpdatedEvent;
 import com.wynntils.models.npcdialogue.event.NpcDialogueProcessingEvent;
 import com.wynntils.services.translation.TranslationService;
 import com.wynntils.utils.mc.McUtils;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import static com.wynntils.core.components.Models.Activity;
 
 @StartDisabled
 @ConfigCategory(Category.UTILITIES)
@@ -154,4 +156,23 @@ public class TranslationFeature extends Feature {
                 .replaceAll("§\\[([0-9]+)\\]", "[§$1]")
                 .replaceAll("§<([0-9]+)>", "<§$1>");
     }
+
+    @SubscribeEvent
+    public void onActivityTrackerUpdate(ActivityTrackerUpdatedEvent event) {
+         if (!translateTrackedQuest.get()) return;
+
+        StyledText task = event.getTask();
+        if (task.isEmpty()) return;
+
+        Services.Translation.getTranslator(translationService.get())
+                .translate(List.of(task.getString()), languageName.get(), translatedMsgList -> {
+                    List<StyledText> translatedComponents = new ArrayList<>();
+                    for (String result : translatedMsgList) {
+                        translatedComponents.add(StyledText.fromString(result));
+                    }
+
+                    Activity.updateTrackedActivityTask(translatedComponents.getFirst());
+                });
+    }
+
 }

@@ -5,10 +5,7 @@
 package com.wynntils.models.activities;
 
 import com.wynntils.core.WynntilsMod;
-import com.wynntils.core.components.Handlers;
-import com.wynntils.core.components.Managers;
-import com.wynntils.core.components.Model;
-import com.wynntils.core.components.Models;
+import com.wynntils.core.components.*;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.features.ui.WynntilsContentBookFeature;
 import com.wynntils.handlers.scoreboard.ScoreboardPart;
@@ -332,6 +329,11 @@ public final class ActivityModel extends Model {
         WynntilsMod.postEvent(new ActivityTrackerUpdatedEvent(
                 trackedActivity.trackedType(), trackedActivity.trackedName(), trackedActivity.trackedTask()));
     }
+
+    public void updateTrackedActivityTask(StyledText newTask) {
+        trackedActivity = new TrackedActivity(this.trackedActivity.trackedName, this.trackedActivity.trackedType, newTask);
+    }
+
 
     void resetTracker() {
         trackedActivity = null;
