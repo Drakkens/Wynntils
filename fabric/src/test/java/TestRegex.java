@@ -6,8 +6,8 @@ import com.wynntils.features.chat.GuildRankReplacementFeature;
 import com.wynntils.features.chat.MessageFilterFeature;
 import com.wynntils.features.inventory.PersonalStorageUtilitiesFeature;
 import com.wynntils.features.redirects.ChatRedirectFeature;
-import com.wynntils.features.trademarket.TradeMarketAutoOpenChatFeature;
 import com.wynntils.features.trademarket.TradeMarketPriceMatchFeature;
+import com.wynntils.features.trademarket.TradeMarketQuickSearchFeature;
 import com.wynntils.features.ui.BulkBuyFeature;
 import com.wynntils.handlers.chat.ChatHandler;
 import com.wynntils.handlers.chat.type.RecipientType;
@@ -30,7 +30,6 @@ import com.wynntils.models.npc.label.NpcLabelParser;
 import com.wynntils.models.players.FriendsModel;
 import com.wynntils.models.players.GuildModel;
 import com.wynntils.models.players.PartyModel;
-import com.wynntils.models.players.label.GuildSeasonLeaderboardLabelParser;
 import com.wynntils.models.raid.RaidModel;
 import com.wynntils.models.statuseffects.StatusEffectModel;
 import com.wynntils.models.territories.GuildAttackTimerModel;
@@ -886,13 +885,6 @@ public class TestRegex {
     }
 
     @Test
-    public void GuildSeasonLeaderboardLabelParser_GUILD_SEASON_LEADERBOARD_PATTERN() {
-        PatternTester p = new PatternTester(GuildSeasonLeaderboardLabelParser.class, "GUILD_SEASON_LEADERBOARD_LABEL");
-        p.shouldMatch("§6§l1§7 - §bIdiot Co§d (11 396 656 SR)");
-        p.shouldMatch("§62§7 - §bSequoia§d (11 057 047 SR)");
-    }
-
-    @Test
     public void GearModel_GEAR_PATTERN() {
         PatternTester p = new PatternTester(GearModel.class, "GEAR_PATTERN");
 
@@ -937,13 +929,14 @@ public class TestRegex {
     }
 
     @Test
-    public void TradeMarketAutoOpenChatFeature_TYPE_TO_CHAT_PATTERN() {
-        PatternTester p = new PatternTester(TradeMarketAutoOpenChatFeature.class, "TYPE_TO_CHAT_PATTERN");
+    public void TradeMarketQuickSearchFeature_TYPE_TO_CHAT_PATTERN() {
+        PatternTester p = new PatternTester(TradeMarketQuickSearchFeature.class, "TYPE_TO_CHAT_PATTERN");
 
         p.shouldMatch(
-                "§5\uE00A\uE002 \n\uE001 Type the amount you wish to buy or type \n\uE001 'cancel' to cancel:\n\uE001 ");
-        p.shouldMatch("§5\uE001 \n\uE001 Type the price in emeralds or type \n\uE001 'cancel' to cancel:\n\uE001 ");
-        p.shouldMatch("§5\uE00A\uE002 \n\uE001 Type the item name or type 'cancel' to \n\uE001 cancel:\n\uE001 ");
+                "§5\uE00A\uE002 Type the price in emeralds or formatted (e.g '10eb', '10stx 5eb') or type 'cancel' to cancel:");
+        p.shouldMatch("§5\uE001 Type the amount you wish to sell or type 'cancel' to cancel:");
+        p.shouldMatch("§5\uE001 Type the item name or type 'cancel' to cancel:");
+        p.shouldMatch("§5\uE00A\uE002 Type the amount you wish to buy or type 'cancel' to cancel:");
     }
 
     @Test
